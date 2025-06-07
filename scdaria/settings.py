@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'aria',
     'rest_framework',
+    'tailwind',
 ]
 
 MIDDLEWARE = [

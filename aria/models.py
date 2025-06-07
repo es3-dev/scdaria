@@ -21,6 +21,7 @@ class Asistencia(models.Model):
     documento = models.IntegerField()
     correo = models.CharField(max_length=200)
     vinculacion = models.CharField(max_length=200)
+    es_graduado = models.BooleanField(default=False)
     reunion = models.ForeignKey(Reunion, on_delete=models.PROTECT)
 
     def __str__(self):
