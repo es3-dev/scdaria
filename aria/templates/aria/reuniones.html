@@ -1,0 +1,71 @@
+{% extends 'aria/includes/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main class="container pb-5">
+    {% if reuniones %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for reunion in reuniones %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ reunion.titulo }}</h5>
+                    <p class="card-text text-muted mb-2">
+                        <i class="bi bi-calendar-event me-2"></i>
+                        {{ reunion.fecha|date:"d/m/Y H:i" }}
+                    </p>
+                    <p class="card-text text-muted mb-3">
+                        <i class="bi bi-geo-alt me-2"></i>
+                        {{ reunion.sede }}
+                    </p>
+                    <p class="card-text">{{ reunion.descripcion|truncatechars:100 }}</p>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0">
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'reunion_creada' reunion.id %}" class="btn btn-outline-primary">
+                            <i class="bi bi-info-circle me-2"></i>Detalles
+                        </a>
+                        <form method="POST" action="{% url 'eliminar_reunion' reunion.id %}" class="d-inline" id="form-eliminar-{{ reunion.id }}">
+                            {% csrf_token %}
+                            <button type="button" class="btn btn-outline-danger btn-eliminarReunion" data-reunion-id="{{ reunion.id }}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-calendar-x display-1 text-muted mb-3"></i>
+        <h4 class="text-muted">No hay reuniones programadas</h4>
+        <p class="text-muted mb-4">Comienza creando una nueva reunión</p>
+        <a href="{% url 'crear_reunion' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-2"></i>Crear Nueva Reunión
+        </a>
+    </div>
+    {% endif %}
+</main>
+
+<div class="modal fade" id="modalConfirmacion" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <div class="card text-center border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Confirmación</h5>
+                        <p class="card-text">¿Está seguro de eliminar esta reunión?</p>
+                        <div class="d-flex justify-content-center gap-2">
+                            <button class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

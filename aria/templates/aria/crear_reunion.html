@@ -1,0 +1,78 @@
+{% extends 'aria/includes/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">                
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Crear Nueva Reunión</h3>
+                        <a href="{% url 'lista_reuniones' %}" class="btn btn-light btn-sm">
+                            <i class="bi bi-arrow-left me-2"></i>Volver
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Título de la reunión -->
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="titulo" name="titulo" 
+                                placeholder="Título de la reunión" required>
+                            <label for="titulo">Título de la reunión</label>
+                            <div class="invalid-feedback">
+                                Por favor ingrese un título para la reunión
+                            </div>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="descripcion" name="descripcion" 
+                                placeholder="Motivo de la reunión" style="height: 120px" required></textarea>
+                            <label for="descripcion">Motivo de la reunión</label>
+                            <div class="invalid-feedback">
+                                Por favor ingrese el motivo de la reunión
+                            </div>
+                        </div>
+
+                        <!-- Fecha de la reunión -->
+                        <div class="form-floating mb-4">
+                            <input type="datetime-local" class="form-control" id="fecha" 
+                                name="fecha" required>
+                            <label for="fecha">Fecha y hora de la reunión</label>
+                            <div class="invalid-feedback">
+                                Por favor seleccione la fecha y hora de la reunión
+                            </div>
+                        </div>
+
+                        <!-- Sede -->
+                        <div class="form-floating mb-4">
+                            <select class="form-select" id="sede" name="sede" required>
+                                <option value="" selected disabled>Seleccione una sede</option>
+                                {% for sede in sedes %}
+                                    <option value="{{ sede.id }}">{{ sede.nombre_sede }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="sede">Sede de la reunión</label>
+                            <div class="invalid-feedback">
+                                Por favor seleccione la sede de la reunión
+                            </div>
+                        </div>
+
+                        <!-- Botón crear -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-calendar-plus-fill me-2"></i>Crear Reunión
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+

@@ -1,0 +1,117 @@
+:root {
+    /* Colores principales */
+    --color-primary: #01616C;         /* Color principal, usado en botones y headers */
+    --color-primary-dark: #054F59;    /* Versión más oscura del color principal */
+    --color-primary-light: #29B1CC;   /* Versión más clara del color principal */
+    
+    /* Colores de fondo */
+    --color-background: #FFF;      /* Color de fondo general */
+    --color-card-bg: #F8F8F8;         /* Color de fondo de las tarjetas */
+    
+    /* Colores de texto */
+    --color-text: #212529;           /* Color de texto principal */
+    --color-text-muted: #6c757d;     /* Color de texto secundario */
+    --color-text-light: #ffffff;      /* Color de texto sobre fondos oscuros */
+    
+    /* Colores de estado */
+    --color-success: #198754;         /* Color para éxito/confirmación */
+    --color-danger: #dc3545;          /* Color para error/peligro */
+    --color-warning: #ffc107;         /* Color para advertencias */
+    --color-info: #0dcaf0;           /* Color para información */
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+/* Estilos de navbar */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.navbar.bg-primary {
+    background-color: var(--color-primary) !important;
+}
+
+.navbar .btn-light:hover {
+    background-color: var(--color-text-light);
+}
+
+/* Estilos de tarjetas */
+.card {
+    border-radius: 10px;
+    border: none;
+    background-color: var(--color-card-bg);
+}
+
+.card-header {
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+}
+
+.card-header.bg-primary {
+    background-color: var(--color-primary) !important;
+    color: var(--color-text-light);
+}
+
+/* Estilos de botones */
+.btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+}
+
+.btn-outline-primary {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-danger {
+    background-color: var(--color-danger);
+    border-color: var(--color-danger);
+}
+
+/* Estilos de textos */
+.text-primary {
+    color: var(--color-primary) !important;
+}
+
+.text-muted {
+    color: var(--color-text-muted) !important;
+}
+
+/* Estilos de formularios */
+.form-floating > label {
+    padding-left: 20px;
+    color: var(--color-text-muted);
+}
+
+/* Estilos de tablas */
+.table th {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+/* Estilos de modales */
+.modal-header .btn-close {
+    margin: -0.5rem -0.5rem -0.5rem auto;
+}
+
+.card-footer.bg-transparent {
+    background-color: transparent !important;
+}
+
+/* Estilos para el estado vacío */
+.display-1.text-muted {
+    opacity: 0.5;
+}

@@ -1,0 +1,73 @@
+{% extends 'aria/includes/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">                
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Registro de Asistencia</h3>
+                        <a href="{% url 'reunion_creada' reunion.id %}" class="btn btn-light btn-sm">
+                            <i class="bi bi-arrow-left me-2"></i>Volver
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'registrar_asistencia' reunion.id %}" method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">¿Es graduado?</label>
+                            <div class="d-flex gap-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="es_graduado" id="graduadoSi" value="true">
+                                    <label class="form-check-label" for="graduadoSi">Sí</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="es_graduado" id="graduadoNo" value="false" checked>
+                                    <label class="form-check-label" for="graduadoNo">No</label>
+                                </div>
+                            </div>
+                        </div>                        
+                        <!-- Campo de documento siempre visible -->
+                        <div class="form-floating mb-3">
+                            <input type="number" class="form-control" id="ndocumento" name="documento" placeholder="Documento de identidad" required>
+                            <label for="ndocumento">Documento de identidad</label>
+                        </div>
+
+                        <!-- Campos para no graduados -->
+                        <div id="campos-no-graduado">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre completo" required>
+                                <label for="nombre">Nombre completo</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="email" name="correo" placeholder="sistemas@uniguajira.edu.co" required>
+                                <label for="email">Correo electrónico</label>
+                            </div>
+
+                            <div class="form-floating mb-4">                                
+                                <select class="form-select" id="vinculacion" name="vinculacion" required>
+                                    <option value="" selected disabled>Seleccione una opción</option>
+                                    {% for value, label in vinculacion_choices %}
+                                    <option value="{{ value }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="vinculacion">Tipo de vinculación</label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-circle-fill me-2"></i>Registrar Asistencia
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

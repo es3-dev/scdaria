@@ -1,0 +1,121 @@
+{% extends 'aria/includes/base.html' %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Editar Asistencia</h2>
+                    <h5 class="text-muted mb-4">{{ reunion.titulo }}</h5>
+
+                    <form method="POST" id="formEditarAsistencia" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Nombre -->
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre completo *</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" 
+                                value="{{ asistencia.nombre }}" required>
+                            <div class="invalid-feedback">
+                                Por favor ingresa tu nombre completo
+                            </div>
+                        </div>
+
+                        <!-- Documento -->
+                        <div class="mb-3">
+                            <label for="documento" class="form-label">Número de documento *</label>
+                            <input type="number" class="form-control" id="documento" name="documento" 
+                                value="{{ asistencia.documento }}" required>
+                            <div class="invalid-feedback">
+                                Por favor ingresa tu número de documento
+                            </div>
+                        </div>
+
+                        <!-- Correo -->
+                        <div class="mb-3">
+                            <label for="correo" class="form-label">Correo electrónico *</label>
+                            <input type="email" class="form-control" id="correo" name="correo" 
+                                value="{{ asistencia.correo }}" required>
+                            <div class="invalid-feedback">
+                                Por favor ingresa un correo electrónico válido
+                            </div>
+                        </div>
+
+                        <!-- Es graduado -->
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="es_graduado" 
+                                    {% if asistencia.es_graduado %}checked{% endif %}>
+                                <label class="form-check-label" for="es_graduado">
+                                    Soy graduado de la Universidad
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Vinculación -->
+                        <div class="mb-3" id="vinculacionContainer" {% if asistencia.es_graduado %}style="display: none;"{% endif %}>
+                            <label for="vinculacion" class="form-label">Vinculación con la Universidad *</label>
+                            <select class="form-select" id="vinculacion" name="vinculacion" 
+                                    {% if not asistencia.es_graduado %}required{% endif %}>
+                                <option value="">Selecciona tu vinculación</option>
+                                {% for value, label in vinculacion_choices %}
+                                <option value="{{ value }}" {% if asistencia.vinculacion == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor selecciona tu vinculación con la Universidad
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="es_graduado" id="es_graduado_hidden" value="{% if asistencia.es_graduado %}true{% else %}false{% endif %}">
+
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'reunion_creada' reunion.id %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Volver
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save me-2"></i>Guardar cambios
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const formEditarAsistencia = document.getElementById('formEditarAsistencia');
+    const esGraduadoCheckbox = document.getElementById('es_graduado');
+    const esGraduadoHidden = document.getElementById('es_graduado_hidden');
+    const vinculacionContainer = document.getElementById('vinculacionContainer');
+    const vinculacionSelect = document.getElementById('vinculacion');
+
+    // Toggle vinculación based on es_graduado
+    esGraduadoCheckbox.addEventListener('change', function() {
+        vinculacionContainer.style.display = this.checked ? 'none' : 'block';
+        esGraduadoHidden.value = this.checked ? 'true' : 'false';
+        vinculacionSelect.required = !this.checked;
+        if (this.checked) {
+            vinculacionSelect.value = '';
+        }
+    });
+
+    // Form validation
+    formEditarAsistencia.addEventListener('submit', function(event) {
+        if (!formEditarAsistencia.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        formEditarAsistencia.classList.add('was-validated');
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

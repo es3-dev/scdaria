@@ -1,0 +1,135 @@
+{% extends 'aria/includes/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Main Content -->
+<div class="container pb-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ reunion.titulo }}</h4>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'editar_reunion' reunion.id %}" class="btn btn-light btn-sm">
+                        <i class="bi bi-pencil-square me-2"></i>Editar
+                    </a>
+                    <form method="POST" action="{% url 'eliminar_reunion' reunion.id %}" class="d-inline" id="form-eliminar-{{ reunion.id }}">
+                        {% csrf_token %}
+                        <button type="button" class="btn btn-light btn-sm btn-eliminarReunion" data-reunion-id="{{ reunion.id }}">
+                            <i class="bi bi-trash me-2"></i>Eliminar
+                        </button>
+                    </form>
+                    <a href="{% url 'lista_reuniones' %}" class="btn btn-light btn-sm">
+                        <i class="bi bi-arrow-left me-2"></i>Volver
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <!-- Detalles de la Reunión -->
+            <div class="mb-4">
+                <h5 class="fw-bold mb-3">Detalles de la Reunión</h5>
+                <div class="ps-3">
+                    <p class="mb-3">
+                        <i class="bi bi-calendar-event me-2"></i>
+                        <span class="fw-semibold">Fecha:</span> 
+                        {{ reunion.fecha|date:"d/m/Y H:i" }}
+                    </p>
+                    <p class="mb-3">
+                        <i class="bi bi-geo-alt me-2"></i>
+                        <span class="fw-semibold">Sede:</span> 
+                        {{ reunion.sede }}
+                    </p>
+                    <p class="mb-3">
+                        <span class="fw-semibold">Descripción:</span>
+                        <br>
+                        <span class="ps-3 mt-2 d-block">{{ reunion.descripcion }}</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Link de Asistencia -->
+            <div class="mb-4">
+                <h5 class="fw-bold mb-3">Link de Asistencia</h5>
+                <div class="input-group">
+                    <input type="text" class="form-control" value="{{ link_asistencia }}" id="linkAsistencia" readonly>
+                    <button class="btn btn-outline-primary" type="button" id="btnCopiarLinkAsist">
+                        <i class="bi bi-clipboard me-2"></i>Copiar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lista de Asistencia -->
+            <div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0">Lista de Asistencia</h5>
+                    <a href="{% url 'formulario_asistencia' reunion.id %}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-2"></i>Registrar Asistencia
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Documento</th>
+                                <th>Vinculación</th>
+                                <th>¿Graduado?</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for asistencia in asistentes %}
+                            <tr>
+                                <td>{{ asistencia.nombre }}</td>
+                                <td>{{ asistencia.documento }}</td>
+                                <td>{{ asistencia.get_vinculacion_display }}</td>
+                                <td>
+                                    {% if asistencia.es_graduado %}
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                    {% else %}
+                                    <i class="bi bi-x-circle text-danger"></i>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'editar_asistencia' reunion.id asistencia.id %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-3">
+                                    No hay asistentes registrados aún
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ventana de Confirmación -->
+<div class="modal fade" id="modalConfirmacion" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <div class="card text-center border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Confirmación</h5>
+                        <p class="card-text">¿Está seguro de eliminar esta reunión?</p>
+                        <div class="d-flex justify-content-center gap-2">
+                            <button class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
