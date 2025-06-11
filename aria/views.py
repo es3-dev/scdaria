@@ -74,7 +74,7 @@ def registrarAsistencia(request, reunion_id):
         reunion = get_object_or_404(Reunion, id=reunion_id)
         es_graduado = request.POST['es_graduado'] == 'true'
         
-        # Crear el diccionario de datos base
+        #Crear el diccionario de datos base
         datos_asistencia = {
             'reunion': reunion,
             'nombre': request.POST['nombre'],
@@ -83,7 +83,7 @@ def registrarAsistencia(request, reunion_id):
             'es_graduado': es_graduado
         }
         
-        # Agregar vinculación solo si no es graduado
+        #Agregar vinculación en el caso de que no sea graduado
         if not es_graduado:
             vinculacion = request.POST.get('vinculacion')
             if vinculacion:
@@ -124,7 +124,7 @@ def editarAsistencia(request, reunion_id, asistencia_id):
         asistencia.correo = request.POST['correo']
         asistencia.es_graduado = request.POST['es_graduado'] == 'true'
         
-        # Actualizar vinculación solo si no es graduado
+        #Cuando no es graduado, actualizamos la vinculacion
         if not asistencia.es_graduado:
             vinculacion = request.POST.get('vinculacion')
             if vinculacion:
